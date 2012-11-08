@@ -17,7 +17,12 @@ Temp
 previews
 **/previews/*.*
 **/Library/*.*
-
+/obj
+*.obj
+*.old
+**/obj/*.*
+obj
+**/build/*.*
 **/silin/*.*
 silin
 
@@ -36,12 +41,7 @@ silin
 *.pidb
 bin-debug
 **/bin-debug/*.*
-obj
-/obj
-*.obj
-*.old
-**/obj/*.*
-**/build/*.*
+
 
 
 
