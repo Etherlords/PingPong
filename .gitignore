@@ -37,8 +37,10 @@ silin
 bin-debug
 **/bin-debug/*.*
 obj
+/obj
+*.obj
+*.old
 **/obj/*.*
-build
 **/build/*.*
 
 
