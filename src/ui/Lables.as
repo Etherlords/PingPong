@@ -7,7 +7,7 @@ package ui
 	public class Lables 
 	{
 		
-		public static var GAME_OVER:String = '<font size="30">GAME OVER</font>'
+		public static var GAME_OVER:String = 	'<font size="30">GAME OVER</font>'
 												+ '\n\n\n\n'
 												+ '<header>Your score</header>'
 												+ '\n\n\n\n'
@@ -27,8 +27,8 @@ package ui
 		public static var START_SCREEN:String = 
 												
 													'ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ'
-												+	'\n\n\n\n\n\n'
-												+'<font size="35">PING PONG</font>\n'
+												+	'\n\n\n\n\n'
+												+'	<font size="35">PING PONG</font>\n'
 												+	'\n'
 												+   'TO START THE GAME\n'
 												+   'PRESS\n'
@@ -36,7 +36,10 @@ package ui
 												+	'\n\n\n\n\n\n'
 												+	'<button><a href="event:startGame">SPACE</a></button>\n'
 												+   'OR FOR RESTART RAUND'
-												+	'\n\n\n\n\n\n'
+												+   '\n'
+												+   'USE <font size="25">A-D</font> or <font size="25">LEFT-RIGHT</font> FOR ROTATE PLATFORM'
+												
+												+	'\n\n\n\n\n'
 
 												+	'ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ ʕ·ᴥ·ʔ'
 		

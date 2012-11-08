@@ -348,15 +348,17 @@ package pingPong.logic
 			{
 				var contact:Point = new Point(boll.body.x, boll.body.y - e.interactionWith.body.y);
 				
-				if(boll.body.x > e.interactionWith.body.x + e.interactionWith.body.width)
-					contact.x = e.interactionWith.body.x + e.interactionWith.body.width;
+				//if(boll.body.x > e.interactionWith.body.x + e.interactionWith.body.width)
+					//contact.x = e.interactionWith.body.x + e.interactionWith.body.width;
 				
 				var convas:BitmapData = new BitmapData(5, 5, false, 0xFFFFFF);
 				var contactEffect:Texture = Texture.fromBitmapData(convas);
 				var image:Image = new Image(contactEffect);
 				
-				image.x = contact.x - image.width/ 2;
+				image.x = contact.x - image.width/ 2 - e.interactionWith.body.width / 2;
 				image.y = contact.y;
+				
+				
 				
 				platform.skin.addChild(image);
 				

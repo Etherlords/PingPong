@@ -57,6 +57,8 @@ package pingPong.view
 			
 			for (fieldName in fields)
 				updatebleComponentsMap[fieldName].scores = model[fieldName];
+				
+			dynamicAlign();
 		}
 		
 		public function shoDialog():void
@@ -78,7 +80,7 @@ package pingPong.view
 		private function align():void
 		{
 			gameStartDialog.x = (stage.stageWidth - gameStartDialog.width) / 2;
-			gameStartDialog.y = (stage.stageHeight - gameStartDialog.height) / 2 - 20;
+			gameStartDialog.y = (stage.stageHeight - gameStartDialog.height) / 2 - 10;
 			dynamicAlign();
 		}
 		

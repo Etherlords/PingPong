@@ -72,16 +72,16 @@ package pingPong.logic
 		private function turnPlatformLeft():void
 		{
 			trace(platform.body.rotation);
-			TweenLite.to(platform.body, 0.05, { rotation: -27 } );
+			//TweenLite.to(platform.body, 0.1, { rotation: 145 } );
 			
-			//platform.body.rotation = -135;
+			platform.body.rotation = 145;
 		}
 		
 		private function turnPlatformRight():void
 		{
-			TweenLite.to(platform.body,  0.05, { rotation:27 } );
+			//TweenLite.to(platform.body,  0.1, { rotation:-145 } );
 			
-			//platform.body.rotation = -225;
+			platform.body.rotation = -145;
 		}
 		
 		private function onImpulseEnd(e:TimerEvent):void
