@@ -9,6 +9,7 @@ package pingPong.settings
 		public var isUseBollParticles:Boolean = true;
 		public var isUseSoftwareBliting:Boolean = false;
 		public var isShowSettingsOnStart:Boolean = true;
+		public var isCenterPlatformOn:Boolean = false;
 		
 		public var iiReactionFactor:Number = 1;
 		

@@ -81,6 +81,7 @@ package pingPong.settings
 			createComponent('isUseBollParticles');
 			createComponent('isUseSoftwareBliting');
 			createComponent('isShowSettingsOnStart');
+			createComponent('isCenterPlatformOn');
 			
 			var hint:TextField = createText(UILables.GENERAL_HINT);
 			addChild(hint);

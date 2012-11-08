@@ -9,7 +9,8 @@ package pingPong.settings.model
 		public static var texts:Object = {
 										'isUseBollParticles':'Эфект частиц на шаре',
 										'isUseSoftwareBliting':'Софтварная отрисовка',
-										'isShowSettingsOnStart':'Настройки при запуске'
+										'isShowSettingsOnStart':'Настройки при запуске',
+										'isCenterPlatformOn':'Платформа по центру'
 									}
 									
 									

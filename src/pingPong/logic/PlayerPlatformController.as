@@ -1,19 +1,22 @@
-package pingPong.logic 
+package pingPong.logic
 {
+	import com.greensock.TweenLite;
 	import core.Box2D.utils.Box2DWorldController;
+	import core.ui.KeyBoardController;
 	import core.view.gameobject.GameObject;
+	import flash.ui.Keyboard;
 	import starling.core.Starling;
 	import starling.display.DisplayObjectContainer;
 	import starling.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.utils.Timer;
-
+	
 	/**
 	 * ...
 	 * @author Nikro
 	 */
-	public class PlayerPlatformController 
+	public class PlayerPlatformController
 	{
 		protected var viewInstance:DisplayObjectContainer;
 		protected var worldController:Box2DWorldController;
@@ -23,7 +26,7 @@ package pingPong.logic
 		private var impulsePhase:Boolean = false;
 		private var impulseTimer:Timer;
 		
-		public function PlayerPlatformController(viewInstance:DisplayObjectContainer, worldController:Box2DWorldController, platform:GameObject) 
+		public function PlayerPlatformController(viewInstance:DisplayObjectContainer, worldController:Box2DWorldController, platform:GameObject)
 		{
 			this.platform = platform;
 			this.worldController = worldController;
@@ -33,18 +36,55 @@ package pingPong.logic
 			initilize();
 		}
 		
-		protected function initilize():void 
+		protected function initilize():void
 		{
-		
+			
 			viewInstance.addEventListener(Event.ENTER_FRAME, onFrameUpdate);
 			Starling.current.nativeStage.addEventListener(MouseEvent.MOUSE_MOVE, onMouseMove);
-			setPlatformPosition(Starling.current.nativeStage.mouseY)//viewInstance.stage.mouseY);
+			setPlatformPosition(Starling.current.nativeStage.mouseY) //viewInstance.stage.mouseY);
 			
 			impulseTimer = new Timer(50, 1);
 			impulseTimer.addEventListener(TimerEvent.TIMER_COMPLETE, onImpulseEnd)
+			
+			var keyController:KeyBoardController = new KeyBoardController(Starling.current.nativeStage);
+			
+			keyController.registerKeyDownReaction(Keyboard.A, turnPlatformLeft);
+			keyController.registerKeyDownReaction(Keyboard.LEFT, turnPlatformLeft);
+			
+			keyController.registerKeyDownReaction(Keyboard.RIGHT, turnPlatformRight);
+			keyController.registerKeyDownReaction(Keyboard.D, turnPlatformRight);
+			
+			keyController.registerKeyUpReaction(Keyboard.A, turnToNormal);
+			keyController.registerKeyUpReaction(Keyboard.D, turnToNormal);
+			keyController.registerKeyUpReaction(Keyboard.LEFT, turnToNormal);
+			keyController.registerKeyUpReaction(Keyboard.RIGHT, turnToNormal);
 		}
 		
-		private function onImpulseEnd(e:TimerEvent):void 
+		
+		private function turnToNormal():void
+		{
+		
+			TweenLite.killTweensOf(platform.body);
+			//TweenLite.to(platform.body, 1, { rotation:-180 } );
+			platform.body.rotation = -180;
+		}
+		
+		private function turnPlatformLeft():void
+		{
+			trace(platform.body.rotation);
+			TweenLite.to(platform.body, 0.05, { rotation: -27 } );
+			
+			//platform.body.rotation = -135;
+		}
+		
+		private function turnPlatformRight():void
+		{
+			TweenLite.to(platform.body,  0.05, { rotation:27 } );
+			
+			//platform.body.rotation = -225;
+		}
+		
+		private function onImpulseEnd(e:TimerEvent):void
 		{
 			
 			impulsePhase = false;
@@ -54,15 +94,15 @@ package pingPong.logic
 			platform.body.x = basex;
 		}
 		
-		protected function onFrameUpdate(e:Event = null):void 
+		protected function onFrameUpdate(e:Event = null):void
 		{
-			if(!impulsePhase)
+			if (!impulsePhase)
 				platform.physicalProperties.stopXVelocity();
-				
+			
 			platform.physicalProperties.stopYVelocity();
 		}
 		
-		private function onMouseMove(e:MouseEvent):void 
+		private function onMouseMove(e:MouseEvent):void
 		{
 			
 			setPlatformPosition(e.stageY);
@@ -74,36 +114,36 @@ package pingPong.logic
 			platform.applyActionView(4);
 			platform.physicalProperties.applyImpulse(50);
 			impulseTimer.start();
-			
+		
 		}
 		
 		protected function setPlatformPosition(position:Number):void
 		{
 			var __y:Number = position - platform.body.height;
 			
-			if (__y < 0)
-				__y = 0;
-				
-			if (__y > 400)
-				__y = 400;
+			if (__y < 0 + platform.skin.phsyHeight)
+				__y = 0 + platform.skin.phsyHeight;
 			
-			if(!impulsePhase)
+			if (__y > 400 + platform.skin.phsyHeight)
+				__y = 400 + platform.skin.phsyHeight;
+			
+			if (!impulsePhase)
 				platform.body.x = basex;
-				
+			
 			platform.body.y = __y;
 		}
 		
-		public function get basex():Number 
+		public function get basex():Number
 		{
 			return _basex;
 		}
 		
-		public function set basex(value:Number):void 
+		public function set basex(value:Number):void
 		{
 			_basex = value;
 			platform.body.x = basex;
 		}
-		
+	
 	}
 
 }

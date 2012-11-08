@@ -21,6 +21,7 @@ package pingPong.logic
 	import pingPong.model.GameStatModel;
 	import pingPong.settings.PingPongSettingsModel;
 	import pingPong.SharedObjectService;
+	import pingPong.view.gameObjectsSkins.CenterPlatformSkin;
 	import pingPong.view.PingPongSceneView;
 	import starling.animation.Tween;
 	import starling.core.Starling;
@@ -94,7 +95,7 @@ package pingPong.logic
 				
 			Mouse.cursor = 'noCursor';
 			
-			speedUpt = 1.07;
+			speedUpt = 1.09;
 			boll.physicalProperties.applyForce(settings.startBollPower * side, 0)
 			
 			//if (Starling.current.nativeStage.contains(gameStartDialog))
@@ -175,6 +176,18 @@ package pingPong.logic
 			
 			platform = new PlatformConstructor().make(sceneView.gameObjectsInstance, worldController);
 			platform2 = new PlatformConstructor().make(sceneView.gameObjectsInstance, worldController);
+				
+			if (settings.isCenterPlatformOn)
+			{
+				
+				var centerPlatform2:GameObject = new PlatformConstructor().make(sceneView.gameObjectsInstance, worldController, CenterPlatformSkin);
+				centerPlatform2.body.y = (GAMEFIELD_HEIGH - centerPlatform2.body.height) / 2 - 55;
+				centerPlatform2.body.x = (GAMEFIELD_WIDTH - centerPlatform2.body.width) / 2 + 5;
+				
+				var centerPlatform:GameObject = new PlatformConstructor().make(sceneView.gameObjectsInstance, worldController, CenterPlatformSkin);
+				centerPlatform.body.y = (GAMEFIELD_HEIGH - centerPlatform.body.height) / 2 + 50;
+				centerPlatform.body.x = (GAMEFIELD_WIDTH - centerPlatform.body.width) / 2 + 5;
+			}
 			
 			boll = new BollConstructor().make(sceneView.gameObjectsInstance, worldController);
 			
@@ -185,8 +198,6 @@ package pingPong.logic
 			iiController = new IIPlatformController(sceneView.gameObjectsInstance, worldController, platform2, boll);
 			
 			var keyController:KeyBoardController = new KeyBoardController(Starling.current.nativeStage);
-			keyController.registerKeyDownReaction(Keyboard.LEFT, movePlatformsLeft);
-			keyController.registerKeyDownReaction(Keyboard.RIGHT, movePlatformsRight);
 			keyController.registerKeyDownReaction(Keyboard.SPACE, startRaund);
 		
 			_boundaries.left.addEventListener(GameObjectPhysicEvent.COLLIDE, playerLose);
@@ -201,18 +212,6 @@ package pingPong.logic
 				energyFlow = new EnergyFlow();
 				view.addChild(energyFlow);
 			}
-		}
-		
-		private function movePlatformsRight():void 
-		{
-			playerPlatformer.basex -= 5;
-			iiController.basex += 5;
-		}
-		
-		private function movePlatformsLeft():void 
-		{
-			playerPlatformer.basex += 5;
-			iiController.basex -= 5;
 		}
 		
 		private function iiLose(e:GameObjectPhysicEvent):void 
@@ -296,22 +295,22 @@ package pingPong.logic
 			
 			speedUpt -= 0.00175
 			
-			if (speedUpt < 1.00975)
-				speedUpt = 1.00975;
+			if (speedUpt < 1.00950)
+				speedUpt = 1.00950;
 				
 			var localSpeedUp:Number = speedUpt;
 		
 			dir.x = currVel.x
 			dir.y = currVel.y
 			
-			if (e.interactionWith == platform || e.interactionWith == platform2)
+			if (e.interactionWith == platform2)
 			{
-				y_delta = (boll.body.y - e.interactionWith.body.y);
+				y_delta = (boll.body.y - e.interactionWith.body.y + e.interactionWith.body.height )
 				
 				ang = (180 / 100 * y_delta) - 90;
 				
-				ang /= 2;
-				ang *= GlobalConstants.DEGREE_TO_RAD * -1;
+				ang /= 3;
+				ang *= GlobalConstants.DEGREE_TO_RAD;
 				
 				intensity = 5;
 				
@@ -327,18 +326,23 @@ package pingPong.logic
 				//dir.x += xPolar * intensity * Math.cos(ang);
 				dir.y += yPolar * intensity * Math.sin(ang);
 				
-				gameStatModel.ricoshet++;
+				//gameStatModel.ricoshet++;
 				
 				
-				y_delta = Math.abs(y_delta - 50);
+				/*y_delta = Math.abs(y_delta - 50);
+				trace("bonus", y_delta);
 				y_delta /= 3000;
 				y_delta = 0.01 - y_delta;
-				localSpeedUp -= y_delta;
-				trace('bonus',speedUpt);
+				localSpeedUp -= y_delta;*/
+				
 			}
 			
-			dir.x *= localSpeedUp;
-			dir.y *= (localSpeedUp - 0.02) < 1.001? 1.001:(localSpeedUp - 0.02);
+			if (e.interactionWith == platform || e.interactionWith == platform2)
+			{
+				dir.x *= localSpeedUp;
+				dir.y *= (localSpeedUp - 0.01) < 1.005? 1.005:(localSpeedUp - 0.01);
+				gameStatModel.ricoshet++;
+			}
 			
 			if (e.interactionWith == platform)
 			{

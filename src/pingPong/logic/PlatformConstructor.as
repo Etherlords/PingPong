@@ -23,13 +23,18 @@ package pingPong.logic
 			
 		}
 		
-		public function make(stage:DisplayObjectContainer, worldController:Box2DWorldController):GameObject 
+		public function make(stage:DisplayObjectContainer, worldController:Box2DWorldController, skin:Class = null):GameObject 
 		{
 			var config:GameobjectConfig = new GameobjectConfig(true);
 			//rabbitConfig.physicConfiguration.friction = 1;
-			config.type = 2; //todo replace
-			//config.shapeType = 1; //todo replace
-			config.skinClass = PlatformSkin;
+			config.type = 0; //todo replace
+			 //todo replace
+			if (!skin)
+			{
+				config.shapeType = 2;
+				skin = PlatformSkin;
+			}
+			config.skinClass = skin;
 			
 			var gameObject:GameObject = worldController.constructGameObject(GameObject, config, new PhysicModel(40, 1, 0.1),  stage);
 			gameObject.physicalProperties.physicModel.fixedRotation = true;
@@ -37,7 +42,7 @@ package pingPong.logic
 			var body:b2Body = (gameObject.physicalProperties as SimplePhysicalProperties).physicBodyKey
 			
 			var fix:b2Fixture = body.GetFixtureList();
-			fix.SetRestitution(1);
+			fix.SetRestitution(0.5);
 			fix.SetFriction(0);
 			
 			body.SetSleepingAllowed(false);

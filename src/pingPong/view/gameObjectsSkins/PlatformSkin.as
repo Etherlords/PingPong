@@ -11,6 +11,7 @@ package pingPong.view.gameObjectsSkins
 	public class PlatformSkin extends Skin 
 	{
 		
+		
 		public function PlatformSkin() 
 		{
 			super();
@@ -18,8 +19,24 @@ package pingPong.view.gameObjectsSkins
 			graphics.lineStyle(2, 0xAAAAAA);
 			graphics.beginFill(0xDDDDDD);
 			graphics.drawRect(0, 0, 25, 100);
+		}
+		
+		override protected function prepareImage():void 
+		{
+			super.prepareImage();
 			
-			
+			image.x -= phsyWidth;
+			image.y -= phsyHeight
+		}
+		
+		override public function get phsyHeight():Number 
+		{
+			return 100/2;
+		}
+		
+		override public function get phsyWidth():Number 
+		{
+			return 25/2;
 		}
 		
 		private var startx:Number = 0;

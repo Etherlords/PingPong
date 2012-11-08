@@ -15,20 +15,29 @@ package pingPong.logic
 	public class IIPlatformController extends PlayerPlatformController 
 	{
 		private var boll:GameObject;
+		private var startDelta:Number;
 		
 		public function IIPlatformController(viewInstance:DisplayObjectContainer, worldController:Box2DWorldController, platform:GameObject, boll:GameObject) 
 		{
 			super(viewInstance, worldController, platform);
 			this.boll = boll;
-			
+			changeDelta();
 		}
 		
 		
 		override protected function initilize():void 
 		{
+			var deltatTimer:Timer = new Timer(2000, 0);
+			deltatTimer.addEventListener(TimerEvent.TIMER, changeDelta);
 			var t:Timer = new Timer(25, 0);
 			t.addEventListener(TimerEvent.TIMER, onTimerEvent);
 			t.start();
+			deltatTimer.start();
+		}
+		
+		private function changeDelta(e:* = null):void 
+		{
+			startDelta = -20 + Math.random() * 40;
 		}
 		
 		private function onTimerEvent(e:TimerEvent):void 
@@ -40,7 +49,9 @@ package pingPong.logic
 		{
 			super.onFrameUpdate(e);
 			
-			var __y:Number = boll.body.y + (platform.body.height - boll.body.height) / 2;
+			var __y:Number = boll.body.y + (platform.body.height / 2 - boll.body.height) / 2
+			
+			
 			/*
 			if (Math.random() > 0.5)
 			{
@@ -50,13 +61,13 @@ package pingPong.logic
 					__y -= boll.body.width *2;
 			}*/
 			
-			__y = __y - platform.body.height;
+			__y = __y + startDelta;
 			
-			if (__y < 0)
-				__y = 0;
-				
-			if (__y > 400)
-				__y = 400;
+			if (__y < 0 + platform.skin.phsyHeight)
+				__y = 0 + platform.skin.phsyHeight;
+			
+			if (__y > 400 + platform.skin.phsyHeight)
+				__y = 400 + platform.skin.phsyHeight;
 			
 			platform.body.x = basex;
 			TweenLite.to(platform.body, 0.03, { y:__y } );
