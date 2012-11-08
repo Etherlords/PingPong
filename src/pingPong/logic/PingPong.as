@@ -94,6 +94,7 @@ package pingPong.logic
 				
 			Mouse.cursor = 'noCursor';
 			
+			speedUpt = 1.07;
 			boll.physicalProperties.applyForce(settings.startBollPower * side, 0)
 			
 			//if (Starling.current.nativeStage.contains(gameStartDialog))
@@ -281,6 +282,8 @@ package pingPong.logic
 		
 		private function onBollCollide(e:GameObjectPhysicEvent):void 
 		{
+
+			var y_delta:Number;
 			var ang:Number = 0;
 			var currVel:Point = boll.physicalProperties.physicModel.linearVelocity;
 			
@@ -293,16 +296,18 @@ package pingPong.logic
 			
 			speedUpt -= 0.00175
 			
-			if (speedUpt < 1.008)
-			if (speedUpt < 1.008)
-				speedUpt = 1.008;
-			
-			dir.x = currVel.x * speedUpt;
-			dir.y = currVel.y * speedUpt - 0.02;
+			if (speedUpt < 1.00975)
+				speedUpt = 1.00975;
+				
+			var localSpeedUp:Number = speedUpt;
+		
+			dir.x = currVel.x
+			dir.y = currVel.y
 			
 			if (e.interactionWith == platform || e.interactionWith == platform2)
 			{
-				var y_delta:Number = (boll.body.y - e.interactionWith.body.y);
+				y_delta = (boll.body.y - e.interactionWith.body.y);
+				
 				ang = (180 / 100 * y_delta) - 90;
 				
 				ang /= 2;
@@ -325,10 +330,15 @@ package pingPong.logic
 				gameStatModel.ricoshet++;
 				
 				
-				
-				
-				
+				y_delta = Math.abs(y_delta - 50);
+				y_delta /= 3000;
+				y_delta = 0.01 - y_delta;
+				localSpeedUp -= y_delta;
+				trace('bonus',speedUpt);
 			}
+			
+			dir.x *= localSpeedUp;
+			dir.y *= (localSpeedUp - 0.02) < 1.001? 1.001:(localSpeedUp - 0.02);
 			
 			if (e.interactionWith == platform)
 			{
