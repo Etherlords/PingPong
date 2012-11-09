@@ -110,6 +110,7 @@ package pingPong.logic
 		
 		public function impulse():void
 		{
+			return;
 			impulsePhase = true;
 			platform.applyActionView(4);
 			platform.physicalProperties.applyImpulse(50);
@@ -140,7 +141,7 @@ package pingPong.logic
 		
 		public function set basex(value:Number):void
 		{
-			_basex = value;
+			_basex = value + platform.body.width;
 			platform.body.x = basex;
 		}
 	

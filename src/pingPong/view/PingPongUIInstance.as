@@ -2,6 +2,7 @@ package pingPong.view
 {
 	import flash.display.Sprite;
 	import flash.events.Event;
+	import flash.events.FullScreenEvent;
 	import patterns.events.LazyModeratorEvent;
 	import pingPong.model.GameStatModel;
 	import ui.Alert;
@@ -48,6 +49,7 @@ package pingPong.view
 			//align();
 			model.addEventListener(LazyModeratorEvent.UPDATE_EVENT, updateView);
 			addEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			
 		}
 		
 		private function updateView(e:LazyModeratorEvent):void 
@@ -74,6 +76,12 @@ package pingPong.view
 		private function onAddedToStage(e:Event):void 
 		{
 			removeEventListener(Event.ADDED_TO_STAGE, onAddedToStage);
+			stage.addEventListener(Event.RESIZE, onFulLScreen);
+			align();
+		}
+		
+		private function onFulLScreen(e:Event):void 
+		{
 			align();
 		}
 		

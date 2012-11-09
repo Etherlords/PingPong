@@ -17,7 +17,7 @@
   <classpaths>
     <class path="..\src" />
     <class path="..\particles" />
-    <class path="..\..\..\projects\PrimaryFeather-Starling-Framework-2a42a8e\starling\src" />
+    <class path="..\..\starling\src" />
     <class path="..\..\reality-0.1\src\main" />
     <class path="..\..\reality-0.1\lib" />
     <class path="..\..\Box2dExtend\src" />

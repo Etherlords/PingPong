@@ -1,6 +1,7 @@
 package pingPong.settings 
 {
 	import flash.display.Sprite;
+	import flash.display.StageDisplayState;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
@@ -10,6 +11,7 @@ package pingPong.settings
 	import flash.utils.getQualifiedClassName;
 	import pingPong.settings.model.UILables;
 	import ui.components.Switch;
+	import utils.GlobalUIContext;
 	
 	/**
 	 * ...
@@ -98,6 +100,20 @@ package pingPong.settings
 			bt.x = (stage.stageWidth - bt.width) / 2;
 			bt.y = componentPlacement.y + 10//stage.stageHeight - bt.height - 5;
 			bt.addEventListener(MouseEvent.MOUSE_DOWN, goToNext);
+			
+			var bt2:Sprite = new Sprite()
+			bt2.addChild(createText('FULL SCREEN'));
+			bt2.graphics.beginFill(0x0, 0);
+			bt2.graphics.drawRect(0, 0, bt.width, bt.height);
+			addChild(bt2);
+			bt2.x = (stage.stageWidth - bt2.width) / 2;
+			bt2.y = componentPlacement.y + 10 + bt.height + 10//stage.stageHeight - bt.height - 5;
+			bt2.addEventListener(MouseEvent.MOUSE_DOWN, goFUll);
+		}
+		
+		private function goFUll(e:MouseEvent):void 
+		{
+			GlobalUIContext.vectorStage.displayState = StageDisplayState.FULL_SCREEN_INTERACTIVE
 		}
 		
 		private function goToNext(e:MouseEvent):void 

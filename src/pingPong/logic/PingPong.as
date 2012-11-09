@@ -112,7 +112,7 @@ package pingPong.logic
 		private function prepareGameStart():void 
 		{
 			
-			platform2.body.x = GAMEFIELD_WIDTH - platform2.body.width / 2 - 10;
+			platform2.body.x = GAMEFIELD_WIDTH - platform2.body.width * 2
 			platform2.body.y = platform.body.y;
 			platform.body.x = 0;
 			
@@ -142,7 +142,7 @@ package pingPong.logic
 			
 			
 			
-			view.x = (view.stage.stageWidth - view.width) / 2;
+			//view.x = (view.stage.stageWidth - view.width) / 2;
 			
 			gameStep()
 			
@@ -163,8 +163,8 @@ package pingPong.logic
 			
 			if (settings.isUseBollParticles)
 			{
-				energyFlow.emitterX = boll.skin.x + 8;
-				energyFlow.emitterY = boll.skin.y + 47;
+				energyFlow.emitterX = boll.skin.x;
+				energyFlow.emitterY = boll.skin.y;
 			}
 		}
 		
@@ -210,7 +210,7 @@ package pingPong.logic
 			if (settings.isUseBollParticles)
 			{
 				energyFlow = new EnergyFlow();
-				view.addChild(energyFlow);
+				sceneView.gameObjectsInstance.addChild(energyFlow);
 			}
 		}
 		
@@ -274,7 +274,7 @@ package pingPong.logic
 			
 			//boll.skin.visible = false;
 			boll.applyActionView(0);
-			view.addChild(blow);
+			sceneView.gameObjectsInstance.addChild(blow);
 			
 			return blow;
 		}

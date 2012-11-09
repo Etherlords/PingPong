@@ -21,7 +21,8 @@ package
 		public function EnergyFlow() 
 		{
 			
-			super(	XML(new InitValues()), Texture.fromBitmap(new Sample(), false, true), Context3DBlendFactor.ONE		);
+			super(	XML(new InitValues()), Texture.fromBitmap(new Sample(), false, true)		);
+			this.blendFactorSource = Context3DBlendFactor.ONE;
 				
 			addEventListener(Event.ADDED_TO_STAGE, onInit);
 			

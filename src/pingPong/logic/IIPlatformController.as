@@ -45,6 +45,16 @@ package pingPong.logic
 			onFrameUpdate();
 		}
 		
+		override public function get basex():Number 
+		{
+			return super.basex;
+		}
+		
+		override public function set basex(value:Number):void 
+		{
+			super.basex = value// -platform.body.width/2;
+		}
+		
 		override protected function onFrameUpdate(e:Event = null):void 
 		{
 			super.onFrameUpdate(e);

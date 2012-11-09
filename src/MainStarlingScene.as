@@ -6,6 +6,7 @@ package
 	import core.states.StatesManager;
 	import flash.display3D.Context3DTextureFormat;
 	import flash.display3D.textures.TextureBase;
+	import flash.geom.Rectangle;
 	import pingPong.logic.PingPong;
 	import pingPong.settings.PingPongSettingsController;
 	import starling.core.RenderSupport;
@@ -50,6 +51,12 @@ package
 			stateManager.nextState(gameState);
 			
 			stateManager.start();
+			
+			Starling.current.root.x = (Starling.current.nativeStage.stageWidth - 800) / 2;
+			Starling.current.root.y = (Starling.current.nativeStage.stageHeight - 600) / 2;
+			Starling.current.viewPort = new Rectangle(Starling.current.root.x, Starling.current.root.y, 800, 600);
+			Starling.current.root.x = 10
+			Starling.current.root.y = 0
 		}
 		
 		
