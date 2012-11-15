@@ -1,6 +1,6 @@
 package  
 {
-	import core.locators.ServicesLocator;
+	import core.services.ServicesLocator;
 	import core.states.config.StateConfig;
 	import core.states.State;
 	import core.states.StatesManager;

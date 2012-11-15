@@ -17,11 +17,12 @@
   <classpaths>
     <class path="..\src" />
     <class path="..\particles" />
-    <class path="..\..\starling\src" />
     <class path="..\..\reality-0.1\src\main" />
-    <class path="..\..\reality-0.1\lib" />
+    <class path="..\..\PeerToPeerEyeCut\src" />
     <class path="..\..\Box2dExtend\src" />
+    <class path="..\..\reality-0.1\lib" />
     <class path="..\..\Box2dPort\src" />
+    <class path="..\..\starling\src" />
   </classpaths>
   <!-- Build options -->
   <build>

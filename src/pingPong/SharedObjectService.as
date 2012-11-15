@@ -1,13 +1,11 @@
 package pingPong 
 {
-	import core.locators.ServicesLocator;
 	import core.services.AbstractService;
+	import core.services.ServicesLocator;
 	import flash.net.registerClassAlias;
 	import flash.net.SharedObject;
-	import flash.utils.Timer;
 	import pingPong.model.GameStatModel;
 	import pingPong.settings.PingPongSettingsModel;
-	import ui.scoreboard.Scoreboard;
 	/**
 	 * ...
 	 * @author Nikro

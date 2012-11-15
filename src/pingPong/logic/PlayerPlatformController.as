@@ -61,15 +61,15 @@ package pingPong.logic
 		}
 		
 		
-		private function turnToNormal():void
+		public function turnToNormal():void
 		{
 		
-			TweenLite.killTweensOf(platform.body);
+			//TweenLite.killTweensOf(platform.body);
 			//TweenLite.to(platform.body, 1, { rotation:-180 } );
 			platform.body.rotation = -180;
 		}
 		
-		private function turnPlatformLeft():void
+		public function turnPlatformLeft():void
 		{
 			trace(platform.body.rotation);
 			//TweenLite.to(platform.body, 0.1, { rotation: 145 } );
@@ -77,7 +77,7 @@ package pingPong.logic
 			platform.body.rotation = 145;
 		}
 		
-		private function turnPlatformRight():void
+		public function turnPlatformRight():void
 		{
 			//TweenLite.to(platform.body,  0.1, { rotation:-145 } );
 			
@@ -118,7 +118,7 @@ package pingPong.logic
 		
 		}
 		
-		protected function setPlatformPosition(position:Number):void
+		public function setPlatformPosition(position:Number):void
 		{
 			var __y:Number = position - platform.body.height;
 			

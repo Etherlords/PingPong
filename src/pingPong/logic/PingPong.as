@@ -3,13 +3,18 @@ package pingPong.logic
 
 	import core.Box2D.scene.BaseBox2DScene;
 	import core.events.GameObjectPhysicEvent;
+	import core.game.GameProcessor;
 	import core.GlobalConstants;
-	import core.locators.ServicesLocator;
+	import core.services.ServicesLocator;
 	import core.ui.KeyBoardController;
 	import core.view.gameobject.GameObject;
 	import flash.display.BitmapData;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	import flash.net.URLLoader;
+	import flash.net.URLRequest;
+	import flash.net.URLRequestMethod;
+	import flash.net.URLVariables;
 	import flash.ui.Keyboard;
 	import flash.ui.Mouse;
 	import flash.ui.MouseCursor;
@@ -19,6 +24,7 @@ package pingPong.logic
 	import pingPong.logic.PlatformConstructor;
 	import pingPong.logic.PlayerPlatformController;
 	import pingPong.model.GameStatModel;
+	import pingPong.net.ConnectionController;
 	import pingPong.settings.PingPongSettingsModel;
 	import pingPong.SharedObjectService;
 	import pingPong.view.gameObjectsSkins.CenterPlatformSkin;
@@ -34,6 +40,8 @@ package pingPong.logic
 	
 	public class PingPong extends BaseBox2DScene
 	{
+		
+		private var maxBollSpeed:Number = 0;
 		
 		static private const GAMEFIELD_WIDTH:Number = 760;
 		static private const GAMEFIELD_HEIGH:Number = 500;
@@ -55,11 +63,13 @@ package pingPong.logic
 		private var mouseDown:Boolean = false;
 		
 		private var playerPlatformer:PlayerPlatformController;
-		private var iiController:IIPlatformController;
+		private var iiController:PlayerPlatformController;
 		
 		private var settings:PingPongSettingsModel;
 		private var gameStatModel:GameStatModel;
 		private var energyFlow:EnergyFlow;
+		private var winner:String;
+		private var connectionManager:ConnectionController;
 		
 		public function PingPong()
 		{
@@ -70,10 +80,12 @@ package pingPong.logic
 		{
 			//create using services
 			
-			
+			connectionManager = new ConnectionController
+			var gameProcessor:GameProcessor = new GameProcessor();
+			gameProcessor.pingPongController = this;
 			
 			gameStatModel = new GameStatModel();
-			scoreService = ServicesLocator.instance.getServiceByClass(SharedObjectService) as SharedObjectService;
+			scoreService = ServicesLocator.instance.getService(SharedObjectService) as SharedObjectService;
 			settings = scoreService.settings;
 			scoreService.controllScore(gameStatModel);
 			
@@ -82,7 +94,7 @@ package pingPong.logic
 			super.initilize();
 		}
 		
-		private function startRaund():void 
+		public function startRaund(needSend:Boolean = true):void 
 		{
 			boll.applyActionView(1);
 			
@@ -90,7 +102,7 @@ package pingPong.logic
 			
 			var side:Number = 1;
 			
-			if (Math.random() > 0.5)
+			if (Math.random() > 1.5)
 				side = -1;
 				
 			Mouse.cursor = 'noCursor';
@@ -107,13 +119,16 @@ package pingPong.logic
 			isGameInProgress = true;
 			
 			sceneView.hideDialog();
+			
+			if(needSend)
+				connectionManager.startRaund();
 		}
 		
 		private function prepareGameStart():void 
 		{
 			
 			platform2.body.x = GAMEFIELD_WIDTH - platform2.body.width * 2
-			platform2.body.y = platform.body.y;
+			//platform2.body.y = platform.body.y;
 			platform.body.x = 0;
 			
 			boll.physicalProperties.stopXVelocity();
@@ -144,19 +159,27 @@ package pingPong.logic
 			
 			//view.x = (view.stage.stageWidth - view.width) / 2;
 			
-			gameStep()
+			gameStep(1)
 			
 			isGameInProgress = false
 		}
 		
-		override protected function gameStep(e:Object = null):void
+		override public function gameStep(e:Number):void
 		{
+			if (!sceneView)
+				return;
+				
 			super.gameStep(e);
+			
+			
 			
 			sceneView.renderScene();
 			
-			//if(isGameInProgress)
+			if(isGameInProgress)
 				gameStatModel.bollSpeed = int((Math.abs(boll.physicalProperties.physicModel.linearVelocity.x) + Math.abs(boll.physicalProperties.physicModel.linearVelocity.y)));
+				
+			if (gameStatModel.bollSpeed > maxBollSpeed)
+				maxBollSpeed = gameStatModel.bollSpeed 
 			
 			GlobalUIContext.debugContainer.x = view.x;
 			GlobalUIContext.debugContainer.y = sceneView.gameObjectsInstance.y;
@@ -193,9 +216,10 @@ package pingPong.logic
 			
 			prepareGameStart();
 			
-			playerPlatformer = new PlayerPlatformController(sceneView.gameObjectsInstance, worldController, platform);
+			playerPlatformer = new NetPlatformController(sceneView.gameObjectsInstance, worldController, platform2);
 			//playerPlatformer = new IIPlatformController(sceneView.gameObjectsInstance, worldController, platform, boll);
-			iiController = new IIPlatformController(sceneView.gameObjectsInstance, worldController, platform2, boll);
+			//iiController = new IIPlatformController(sceneView.gameObjectsInstance, worldController, platform2, boll);
+			iiController = new RemotePlatformController(sceneView.gameObjectsInstance, worldController, platform);
 			
 			var keyController:KeyBoardController = new KeyBoardController(Starling.current.nativeStage);
 			keyController.registerKeyDownReaction(Keyboard.SPACE, startRaund);
@@ -216,12 +240,14 @@ package pingPong.logic
 		
 		private function iiLose(e:GameObjectPhysicEvent):void 
 		{
+			winner = 'R2D2';
 			scoreService.updateScore(scoreService.localScore - 1);
 			gameOver();
 		}
 		
 		private function playerLose(e:GameObjectPhysicEvent):void 
 		{
+			winner = settings.playerName
 			scoreService.updateScore(scoreService.localScore + 1);
 			gameOver();
 		}
@@ -229,7 +255,7 @@ package pingPong.logic
 		private function gameOver():void 
 		{
 			Mouse.cursor = MouseCursor.AUTO;
-
+			
 			isGameInProgress = false;
 			
 			if (settings.isUseBollParticles)
@@ -246,7 +272,19 @@ package pingPong.logic
 			
 			
 			prepareGameStart();
+			//{"gamesStatistic":[{"reportId":"3b0b1c47-0e2c-4f57-9924-dcff01129b7b","statistic":{"winner":"LESHINA","maxBallSpeed":25,"ricoshets":1}}],"reportId":"LESHINA"}
+			var request:URLRequest = new URLRequest('http://st.depositphotos.net:8080/ametisten-stat/game/end');
 			
+			var variables:URLVariables = new URLVariables();
+			variables.accountName = settings.playerName;
+			variables.ricoshetsCount = gameStatModel.ricoshet;
+			variables.maxBallSpeed = maxBollSpeed;
+			variables.winnerName = winner;
+			request.data = variables
+			
+			request.method = URLRequestMethod.POST;
+			
+			var urlLoader:URLLoader = new URLLoader(request);
 			
 		}
 		
@@ -303,7 +341,7 @@ package pingPong.logic
 			dir.x = currVel.x
 			dir.y = currVel.y
 			
-			if (e.interactionWith == platform2)
+			if (e.interactionWith == platform2 && false)
 			{
 				y_delta = (boll.body.y - e.interactionWith.body.y + e.interactionWith.body.height )
 				

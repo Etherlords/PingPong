@@ -1,12 +1,13 @@
 package  pingPong.view
 {
 	//import com.sociodox.theminer.TheMiner;
-	import core.locators.ServicesLocator;
+	import core.services.ServicesLocator;
 	import flash.geom.Point;
 	import pingPong.model.GameStatModel;
 	import starling.display.DisplayObjectContainer;
 	import starling.display.Sprite;
 	import ui.scoreboard.Scoreboard;
+	import ui.services.CameraService;
 	import ui.services.scores.ScoresService;
 	import utils.GlobalUIContext;
 	
@@ -41,7 +42,9 @@ package  pingPong.view
 		{
 			var i:int;
 			
-			var target:Point = ServicesLocator.cameraService.camera.target;
+			var cameraService:CameraService = ServicesLocator.instance.getService(CameraService) as CameraService
+			
+			var target:Point = cameraService.camera.target;
 			
 			for (i = 0; i < trackCameraInstances.length; i++)
 			{
@@ -75,7 +78,8 @@ package  pingPong.view
 		
 		public function initilize():void 
 		{
-            scoresService = ServicesLocator.instance.getServiceByClass(ScoresService) as ScoresService;
+			
+            scoresService = ServicesLocator.instance.getService(ScoresService) as ScoresService;
 			trackCameraInstances = new Vector.<DisplayObjectContainer>;
 			createInstances();
 			createComponents();
